@@ -51,27 +51,38 @@ type MediaObject = {
 }
 
 // Async actions using thunks
-export const fetchMedia = (): ThunkAction<void, MediaState, null, Action<string>> => async (dispatch: ThunkDispatch<MediaState, null, Action<string>>) => {
-  const response = await fetch(`${API_URL}/list`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
-  });
-  const data = await response.json();
-  const result = data.map((item: MediaObject) => ({
-    name: item.name,
-    url: item.url,
-    timestamp: item.created
-  }));
-  dispatch(updateMedia(result));
-};
+export const fetchMedia = (): ThunkAction<void, MediaState, null, Action<string>> =>
+  async (dispatch: ThunkDispatch<MediaState, null, Action<string>>) => {
+    const response = await fetch(`${API_URL}/list`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+    const data = await response.json();
+    const result = data.map((item: MediaObject) => ({
+      name: item.name,
+      url: item.url,
+      timestamp: item.created
+    }));
+    dispatch(updateMedia(result));
+  };
 
-// export const uploadMedia = (): ThunkAction<void, MediaState, null, Action<string>> => async (dispatch) => {
-//
-// }
+export const uploadMedia = (media: Media): ThunkAction<void, MediaState, null, Action<string>> =>
+  async (dispatch: ThunkDispatch<MediaState, null, Action<string>>) => {
+    const response = await fetch(`${API_URL}/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(media),
+    });
+    const data = await response.json();
+    dispatch(addMedia(data));
+}
 
-// Reducer logic for media storage
+// Reducer logic for media storage, defines initial state and default reducer logic.
 const initialState: MediaState = {
  data: [],
 }

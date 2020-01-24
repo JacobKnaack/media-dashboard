@@ -36,7 +36,7 @@ export default (props: layoutProps) => {
           onClick={()=>toggleMenu(false)}
         />
         {props.columns.map((el: columnProps, idx: number) => {
-          return <Column key={idx} component={el.component} title={el.title} size={25} />
+          return <Column key={idx} component={el.component} title={el.title.toUpperCase()} size={25} />
         })}
       </main>
     </div>
